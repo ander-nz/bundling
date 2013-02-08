@@ -1,13 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Arraybracket.Bundling.Tests {
+namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 	[TestClass]
-	public sealed class ScriptDependencyOrdererTest : ScriptDependencyOrdererTestBase {
+	public sealed class SimpleTests : TestBase {
 		[TestMethod]
-		public void TestASingleDirectDependency() {
+		public void ASingleDirectDependencyShouldPrecedeItsUsage() {
 			var lib = this._WriteFile("lib.js", @"
 alert('1');
 ");
@@ -22,7 +19,7 @@ alert('2');
 		}
 
 		[TestMethod]
-		public void TestTwoDirectDependencies() {
+		public void TwoDirectDependenciesShouldPrecedeTheirUsage() {
 			var lib1 = this._WriteFile("lib1.js", @"
 alert('1');
 ");
@@ -51,7 +48,7 @@ alert('3');
 		}
 
 		[TestMethod]
-		public void TestAnIndirectDependency() {
+		public void ATransitiveDependencyShouldPrecedeAllUsage() {
 			var libcore = this._WriteFile("libcore.js", @"
 alert('1');
 ");
@@ -71,7 +68,7 @@ alert('3');
 		}
 
 		[TestMethod]
-		public void TestADuplicateDependency() {
+		public void ADuplicateDependencyShouldNotBeRepeated() {
 			var libcore = this._WriteFile("libcore.js", @"
 alert('1');
 ");
@@ -98,23 +95,6 @@ alert('3');
 
 			this._AssertOrderingFor(libcore, libaddons, app).Expect(libcore).Expect(libaddons).Expect(app).Complete();
 			this._AssertOrderingFor(app, libaddons, libcore).Expect(libcore).Expect(libaddons).Expect(app).Complete();
-		}
-
-		[TestMethod, ExpectedException(typeof(ArgumentException))]
-		public void TestThatACyclicDependencyCausesAnError() {
-			var lib1 = this._WriteFile("lib1.js", @"
-/// <reference path=""lib2.js"" />
-alert('1');
-");
-
-			var lib2 = this._WriteFile("lib2.js", @"
-/// <reference path=""lib1.js"" />
-alert('2');
-");
-
-			var inputFiles = new[] { lib1, lib2 }.Select(i => new FileInfo(i)).ToArray();
-			var actualFiles = new ScriptDependencyOrderer().OrderFiles(null, inputFiles).ToArray();
-			TextWriter.Null.Write(actualFiles);
 		}
 	}
 }

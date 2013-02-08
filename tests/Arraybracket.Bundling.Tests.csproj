@@ -42,8 +42,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScriptDependencyOrdererTest.cs" />
-    <Compile Include="ScriptDependencyOrdererTestBase.cs" />
+    <Compile Include="ScriptDependencyOrdererTests\ExtendedTests.cs" />
+    <Compile Include="ScriptDependencyOrdererTests\SimpleTests.cs" />
+    <Compile Include="ScriptDependencyOrdererTests\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">

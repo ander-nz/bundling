@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Arraybracket.Bundling.Tests {
-	public abstract class ScriptDependencyOrdererTestBase : IDisposable {
+namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
+	public abstract class TestBase : IDisposable {
 		private string _ContentPath;
 
-		protected ScriptDependencyOrdererTestBase() {
+		protected TestBase() {
 			this._ContentPath = Path.Combine(Path.GetTempPath(), "Arraybracket.Bundling.Tests");
 			Directory.CreateDirectory(this._ContentPath);
 		}
@@ -54,6 +52,12 @@ namespace Arraybracket.Bundling.Tests {
 			public void Complete() {
 				Assert.AreEqual(this._OrderedFileNames.Length, this._Index);
 			}
+		}
+
+		protected void _ExecuteOrderingFor(params string[] inputFileNames) {
+			var inputFiles = inputFileNames.Select(i => new FileInfo(i)).ToArray();
+			var actualFiles = new ScriptDependencyOrderer().OrderFiles(null, inputFiles).ToArray();
+			TextWriter.Null.Write(actualFiles);
 		}
 	}
 }
