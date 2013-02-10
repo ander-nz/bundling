@@ -6,19 +6,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 	public abstract class TestBase : IDisposable {
-		private string _ContentPath;
-
-		protected TestBase() {
-			this._ContentPath = Path.Combine(Path.GetTempPath(), "Arraybracket.Bundling.Tests");
-			Directory.CreateDirectory(this._ContentPath);
-		}
-
+		private readonly DependencyNameComparer _Comparer = new DependencyNameComparer();
+		private readonly string _ContentPath = Path.Combine(Path.GetTempPath(), "Arraybracket.Bundling.Tests");
+		
 		public void Dispose() {
-			Directory.Delete(this._ContentPath, true);
+			if (Directory.Exists(this._ContentPath))
+				Directory.Delete(this._ContentPath, true);
 		}
 
 		protected string _WriteFile(string name, string content) {
-			var path = Path.Combine(this._ContentPath, name);
+			var path = Path.GetFullPath(Path.Combine(this._ContentPath, name));
+			Directory.CreateDirectory(Path.GetDirectoryName(path));
 			File.WriteAllText(path, content);
 			return path;
 		}
@@ -58,6 +56,12 @@ namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 			var inputFiles = inputFileNames.Select(i => new FileInfo(i)).ToArray();
 			var actualFiles = new ScriptDependencyOrderer().OrderFiles(null, inputFiles).ToArray();
 			TextWriter.Null.Write(actualFiles);
+		}
+
+		protected void _AssertNameComparison(bool expected, string name1, string name2) {
+			Assert.AreEqual(expected, this._Comparer.Equals(name1, name2));
+			if (expected)
+				Assert.AreEqual(this._Comparer.GetHashCode(name1), this._Comparer.GetHashCode(name2));
 		}
 	}
 }

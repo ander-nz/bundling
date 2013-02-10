@@ -14,10 +14,15 @@ namespace Arraybracket.Bundling {
 				Path = i.FullName,
 				FileInfo = i,
 				Dependencies = this._GetDependencies(i.FullName).ToArray(),
-			}).ToDictionary(f => f.Path, StringComparer.OrdinalIgnoreCase);
+			}).ToDictionary(f => f.Path, new DependencyNameComparer());
+
+			if (!fileDependencies.Values.All(f => f.Dependencies.All(d => fileDependencies.ContainsKey(d))))
+				throw new ArgumentException();
 
 			while (fileDependencies.Count > 0) {
-				var result = fileDependencies.Values.First(f => f.Dependencies.All(d => !fileDependencies.ContainsKey(d)));
+				var result = fileDependencies.Values.FirstOrDefault(f => f.Dependencies.All(d => !fileDependencies.ContainsKey(d)));
+				if (result == null)
+					throw new ArgumentException();
 				yield return result.FileInfo;
 				fileDependencies.Remove(result.Path);
 			}

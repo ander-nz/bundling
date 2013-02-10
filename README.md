@@ -44,3 +44,4 @@ To support Visual Studio's JavaScript intellisense and TypeScript correctly, cer
 * <code>jquery-1.9.0.js</code> matches <code>jquery-1.9.0-vsdoc.js</code>
 * <code>jquery-1.9.0.js</code> matches <code>jquery.intellisense.js</code>
 * <code>jquery.min.js</code> matches <code>jquery-1.9.d.ts</code>
+* <code>jquery-ui-1.10.custom.js</code> matches <code>jquery-ui.d.ts</code>

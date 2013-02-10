@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScriptDependencyOrdererTests\ExtendedTests.cs" />
+    <Compile Include="ScriptDependencyOrdererTests\ComparerTests.cs" />
     <Compile Include="ScriptDependencyOrdererTests\SimpleTests.cs" />
     <Compile Include="ScriptDependencyOrdererTests\TestBase.cs" />
   </ItemGroup>
