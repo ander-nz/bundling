@@ -12,14 +12,14 @@ Usage
 
 When constructing a <code>ScriptBundle</code>, set the bundle's <code>Orderer</code> property to an instance of <code>ScriptDependencyOrderer</code>. The below example highlights the specified change.
 
-<code>
-var scriptBundle = new ScriptBundle();<br/>
-scriptBundle.Include("~/scripts/libs/\*.js");<br/>
-scriptBundle.Include("~/scripts/\*.ts");<br/>
-scriptBundle.Transforms.Add(new JsTransformer());<br/>
-**scriptBundle.Orderer = new ScriptDependencyOrderer();**<br/>
+```csharp
+var scriptBundle = new ScriptBundle();
+scriptBundle.Include("~/scripts/libs/\*.js");
+scriptBundle.Include("~/scripts/\*.ts");
+scriptBundle.Transforms.Add(new JsTransformer());
+scriptBundle.Orderer = new ScriptDependencyOrderer(); // add this line
 BundleTable.Bundles.Add(scriptBundle);
-</code>
+```
 
 Relative Paths
 ==============
