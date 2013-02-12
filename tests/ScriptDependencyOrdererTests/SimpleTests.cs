@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
-	[TestClass]
+	[TestFixture]
 	public sealed class SimpleTests : TestBase {
-		[TestMethod]
+		[Test]
 		public void ASingleDirectDependencyShouldPrecedeItsUsage() {
 			var lib = this._WriteFile("lib.js", @"
 alert('1');
@@ -18,7 +18,7 @@ alert('2');
 			this._AssertOrderingFor(app, lib).Expect(lib).Expect(app).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void TwoDirectDependenciesShouldPrecedeTheirUsage() {
 			var lib1 = this._WriteFile("lib1.js", @"
 alert('1');
@@ -47,7 +47,7 @@ alert('3');
 			this._AssertOrderingFor(app, lib2, lib1).Expect(lib1, lib2).Expect(app).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ATransitiveDependencyShouldPrecedeAllUsage() {
 			var libcore = this._WriteFile("libcore.js", @"
 alert('1');
@@ -67,7 +67,7 @@ alert('3');
 			this._AssertOrderingFor(app, libaddons, libcore).Expect(libcore).Expect(libaddons).Expect(app).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ADuplicateDependencyShouldNotBeRepeated() {
 			var libcore = this._WriteFile("libcore.js", @"
 alert('1');

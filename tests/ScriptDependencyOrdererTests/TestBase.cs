@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 	public abstract class TestBase : IDisposable {
@@ -23,10 +23,16 @@ namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 		
 		/// <remarks>This method is marked as <see cref="PureAttribute">Pure</see> so that code analysis ensures that its return value is consumed.</remarks>
 		[Pure]
-		protected _AssertOrderingHelper _AssertOrderingFor(params string[] inputFileNames) {
+		protected _AssertOrderingHelper _AssertOrderingFor(ScriptDependencyOrderer orderer, params string[] inputFileNames) {
 			var inputFiles = inputFileNames.Select(i => new FileInfo(i)).ToArray();
-			var actualFiles = new ScriptDependencyOrderer().OrderFiles(null, inputFiles).ToArray();
+			var actualFiles = orderer.OrderFiles(null, inputFiles).ToArray();
 			return new _AssertOrderingHelper(actualFiles.Select(a => a.FullName).ToArray());
+		}
+
+		/// <remarks>This method is marked as <see cref="PureAttribute">Pure</see> so that code analysis ensures that its return value is consumed.</remarks>
+		[Pure]
+		protected _AssertOrderingHelper _AssertOrderingFor(params string[] inputFileNames) {
+			return this._AssertOrderingFor(new ScriptDependencyOrderer(), inputFileNames);
 		}
 
 		protected sealed class _AssertOrderingHelper {

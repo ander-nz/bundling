@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
-	[TestClass]
+	[TestFixture]
 	public sealed class ExtendedTests : TestBase {
-		[TestMethod, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void CyclicDependenciesShouldCauseAnError() {
 			var lib1 = this._WriteFile("lib1.js", @"
 /// <reference path=""lib2.js"" />
@@ -16,30 +16,32 @@ alert('1');
 alert('2');
 ");
 
-			this._ExecuteOrderingFor(lib1, lib2);
+			Assert.Throws<ArgumentException>(() => this._ExecuteOrderingFor(lib1, lib2));
 		}
 
-		[TestMethod, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void UnspecifiedUnknownDependenciesShouldCauseAnError() {
 			var app = this._WriteFile("app.js", @"
 /// <reference path=""lib.js"" />
 alert('2');
 ");
-			
-			this._ExecuteOrderingFor(app);
+
+			Assert.Throws<ArgumentException>(() => this._ExecuteOrderingFor(app));
 		}
 
-		[TestMethod]
+		[Test]
 		public void SpecifiedUnknownDependenciesShouldBeIgnored() {
 			var app = this._WriteFile("app.js", @"
-/// <reference path=""libs/modernizr.js"" />
+/// <reference path=""lib.js"" />
 alert('2');
 ");
 
-			this._AssertOrderingFor(app).Expect(app).Complete();
+			var orderer = new ScriptDependencyOrderer();
+			orderer.ExcludedDependencies.Add("lib");
+			this._AssertOrderingFor(orderer, app).Expect(app).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ATransitiveDependencyPathShouldBeRelativeToTheIncludingDependency() {
 			var deepLib = this._WriteFile("libs/helpers/lib.js", @"
 alert('1');
@@ -59,7 +61,7 @@ alert('3');
 			this._AssertOrderingFor(rootLib, shallowLib, deepLib).Expect(deepLib).Expect(shallowLib).Expect(rootLib).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ADependencyReferenceShouldBeInsensitiveToCaseOrSuffix() {
 			var lib = this._WriteFile("lib-1.9.1.CUSTOM.PACK.JS", @"
 alert('1');
@@ -74,7 +76,7 @@ alert('2');
 			this._AssertOrderingFor(app, lib).Expect(lib).Expect(app).Complete();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ADuplicateDependencyThatDiffersByRelativePathOrCaseOrSuffixShouldNotBeRepeated() {
 			var lib1 = this._WriteFile("libs/lib1-1.9.1.CUSTOM.PACK.JS", @"
 alert('1');
@@ -95,7 +97,7 @@ alert('3');
 			this._AssertOrderingFor(app, lib2, lib1).Expect(lib1).Expect(lib2).Expect(app).Complete();
 		}
 
-		[TestMethod, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void CollidingDependenciesShouldCauseAnError() {
 			var lib1 = this._WriteFile("lib-vsdoc.js", @"
 alert('1');
@@ -110,7 +112,7 @@ alert('2');
 /// <reference path=""lib-intellisense.js"" />
 ");
 
-			this._ExecuteOrderingFor(lib1, lib2, app);
+			Assert.Throws<ArgumentException>(() => this._ExecuteOrderingFor(lib1, lib2, app));
 		}
 	}
 }
