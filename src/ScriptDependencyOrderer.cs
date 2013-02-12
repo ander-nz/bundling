@@ -34,7 +34,7 @@ namespace Arraybracket.Bundling {
 			return _ReferenceRegex.Matches(File.ReadAllText(path)).Cast<Match>().Select(m => {
 				var relativePath = m.Groups["path"].Value;
 				return Path.GetFullPath(Path.Combine(dir, relativePath));
-			});
+			}).Where(m => !m.Contains(@"\modernizr"));
 		}
 	}
 }

@@ -20,13 +20,23 @@ alert('2');
 		}
 
 		[TestMethod, ExpectedException(typeof(ArgumentException))]
-		public void UnknownDependenciesShouldCauseAnError() {
+		public void UnspecifiedUnknownDependenciesShouldCauseAnError() {
 			var app = this._WriteFile("app.js", @"
 /// <reference path=""lib.js"" />
 alert('2');
 ");
 			
 			this._ExecuteOrderingFor(app);
+		}
+
+		[TestMethod]
+		public void SpecifiedUnknownDependenciesShouldBeIgnored() {
+			var app = this._WriteFile("app.js", @"
+/// <reference path=""libs/modernizr.js"" />
+alert('2');
+");
+
+			this._AssertOrderingFor(app).Expect(app).Complete();
 		}
 
 		[TestMethod]
@@ -83,6 +93,24 @@ alert('3');
 
 			this._AssertOrderingFor(lib1, lib2, app).Expect(lib1).Expect(lib2).Expect(app).Complete();
 			this._AssertOrderingFor(app, lib2, lib1).Expect(lib1).Expect(lib2).Expect(app).Complete();
+		}
+
+		[TestMethod, ExpectedException(typeof(ArgumentException))]
+		public void CollidingDependenciesShouldCauseAnError() {
+			var lib1 = this._WriteFile("lib-vsdoc.js", @"
+alert('1');
+");
+
+			var lib2 = this._WriteFile("lib-intellisense.js", @"
+alert('2');
+");
+
+			var app = this._WriteFile("app.js", @"
+/// <reference path=""lib-vsdoc.js"" />
+/// <reference path=""lib-intellisense.js"" />
+");
+
+			this._ExecuteOrderingFor(lib1, lib2, app);
 		}
 	}
 }
