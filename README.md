@@ -1,7 +1,7 @@
 Arraybracket.Bundling
 =====================
 
-<code>ScriptDependencyOrderer</code> is an implementation of <code>IBundleOrderer</code> for *.js and *.ts files that sorted any dependencies specified through <code>/// &lt; reference /></code> tags.
+<code>ScriptDependencyOrderer</code> is an implementation of <code>IBundleOrderer</code> for *.js and *.ts files that sorts any dependencies specified through <code>/// &lt; reference /></code> tags.
 
 Visual Studio's JavaScript editor uses <code>/// &lt; reference /> tags</code> to assist intellisense. Similarly, TypeScript uses the same tags to specify dependencies (for both intellisense and code verification). <code>ScriptDependencyOrderer</code> will scan all the included files in a <code>ScriptBundle</code> and ensure that the specified dependencies are sorted appropriately.
 
