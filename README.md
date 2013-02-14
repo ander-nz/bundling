@@ -10,7 +10,13 @@ Some JavaScript libraries have separate *.intellisense.js or *.d.ts files, and <
 Usage
 =====
 
-When constructing a <code>ScriptBundle</code>, set the bundle's <code>Orderer</code> property to an instance of <code>ScriptDependencyOrderer</code>. The below example highlights the specified change.
+From your web project, add a NuGet package reference by running:
+
+```
+Install-Package Arraybracket.Bundling
+```
+
+Then, when constructing a <code>ScriptBundle</code>, set the bundle's <code>Orderer</code> property to an instance of <code>ScriptDependencyOrderer</code>. The below example specified the required change:
 
 ```csharp
 var scriptBundle = new ScriptBundle();
@@ -45,3 +51,16 @@ To support Visual Studio's JavaScript intellisense and TypeScript correctly, cer
 * <code>jquery-1.9.0.js</code> matches <code>jquery.intellisense.js</code>
 * <code>jquery.min.js</code> matches <code>jquery-1.9.d.ts</code>
 * <code>jquery-ui-1.10.custom.js</code> matches <code>jquery-ui.d.ts</code>
+
+Excluded Dependencies
+=====================
+
+To ensure that name matching doesn't miss any references, <code>ScriptDependencyOrderer</code> will throw an exception if a dependency is referenced but cannot be found in the bundle. Since certain libraries have to be included separately from the bundle (such as Modernizr), but may still be referenced as a dependency (i.e. modernizr.d.ts), you can specify an excluded dependency by setting <code>ExcludedDependencies</code> on the orderer.
+
+```csharp
+var orderer = new ScriptDependencyOrderer();
+orderer.ExcludedDependencies.Add("modernizr"); // excludes any files whose file name starts with "modernizr"
+scriptBundle.Orderer = orderer;
+```
+
+Note that, by default, modernizr is already an excluded dependency.
