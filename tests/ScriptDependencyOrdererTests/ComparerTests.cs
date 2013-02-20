@@ -50,6 +50,7 @@ namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 			this._AssertNameComparison(true, "lib.js", "lib-1.9.0.js");
 			this._AssertNameComparison(true, "lib.js", "lib-1.9.js");
 			this._AssertNameComparison(true, "lib.js", "lib-1.js");
+			this._AssertNameComparison(true, "lib.js", "lib-2.3.a.1.js");
 		}
 
 		[Test]

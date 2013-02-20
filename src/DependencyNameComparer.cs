@@ -21,7 +21,7 @@ namespace Arraybracket.Bundling {
 			value = value.Replace(".custom.", ".");
 			value = value.Replace(".intellisense.", ".");
 			value = value.Replace(".vsdoc.", ".");
-			value = Regex.Replace(value, @"\.(\d*\.)+", ".");
+			value = Regex.Replace(value, @"\.(([0-9]*|[A-Za-z])\.)+", ".");
 			return value;
 		}
 	}
