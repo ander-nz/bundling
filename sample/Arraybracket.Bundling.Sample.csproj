@@ -43,8 +43,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\.packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Arraybracket.Bundling">
-      <HintPath>..\.packages\Arraybracket.Bundling.1.0.0\lib\net40\Arraybracket.Bundling.dll</HintPath>
+    <Reference Include="Arraybracket.Bundling, Version=1.0.1.0, Culture=neutral, PublicKeyToken=71b4a5d2689c599e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\.packages\Arraybracket.Bundling.1.0.1\lib\net40\Arraybracket.Bundling.dll</HintPath>
     </Reference>
     <Reference Include="BundleTransformer.Core">
       <HintPath>..\.packages\BundleTransformer.Core.1.6.21\lib\net40\BundleTransformer.Core.dll</HintPath>
