@@ -31,7 +31,6 @@ Global
 		{CA99A5A5-2130-4DC6-A968-E6D465610A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA99A5A5-2130-4DC6-A968-E6D465610A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA99A5A5-2130-4DC6-A968-E6D465610A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA99A5A5-2130-4DC6-A968-E6D465610A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
