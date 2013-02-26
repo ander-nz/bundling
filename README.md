@@ -20,8 +20,8 @@ Then, when constructing a <code>ScriptBundle</code>, set the bundle's <code>Orde
 
 ```csharp
 var scriptBundle = new ScriptBundle("~/scripts/combined");
-scriptBundle.Include("~/scripts/libs/\*.js");
-scriptBundle.Include("~/scripts/\*.ts");
+scriptBundle.Include("~/scripts/libs/*.js");
+scriptBundle.Include("~/scripts/*.ts");
 scriptBundle.Transforms.Add(new JsTransformer());
 scriptBundle.Orderer = new ScriptDependencyOrderer(); // add this line
 BundleTable.Bundles.Add(scriptBundle);
