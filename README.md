@@ -19,7 +19,7 @@ Install-Package Arraybracket.Bundling
 Then, when constructing a <code>ScriptBundle</code>, set the bundle's <code>Orderer</code> property to an instance of <code>ScriptDependencyOrderer</code>. The below example specified the required change:
 
 ```csharp
-var scriptBundle = new ScriptBundle();
+var scriptBundle = new ScriptBundle("~/scripts/combined");
 scriptBundle.Include("~/scripts/libs/\*.js");
 scriptBundle.Include("~/scripts/\*.ts");
 scriptBundle.Transforms.Add(new JsTransformer());
