@@ -8,29 +8,29 @@ using System.Web.Optimization;
 namespace Arraybracket.Bundling {
 	public sealed class ScriptDependencyOrderer : IBundleOrderer {
 
-        private readonly IEqualityComparer<string> _DependencyNameComparer;
+		private readonly IEqualityComparer<string> _DependencyNameComparer;
 
-	    private static readonly Regex _ReferenceRegex = new Regex(@"///\s*<reference\s+path=""(?<path>[^""]*)""\s*/>");
+		private static readonly Regex _ReferenceRegex = new Regex(@"///\s*<reference\s+path=""(?<path>[^""]*)""\s*/>");
 
-        public List<string> ExcludedDependencies = new List<string> {
+		public List<string> ExcludedDependencies = new List<string> {
 			"modernizr",
 		};
-        
-        public ScriptDependencyOrderer() : this(new DependencyNameComparer()) {
-        }
-        
-        public ScriptDependencyOrderer(IEqualityComparer<string> dependencyNameComparer) {
-            _DependencyNameComparer = dependencyNameComparer;
-        }
+		
+		public ScriptDependencyOrderer() : this(new DependencyNameComparer()) {
+		}
+		
+		public ScriptDependencyOrderer(IEqualityComparer<string> dependencyNameComparer) {
+			_DependencyNameComparer = dependencyNameComparer;
+		}
 
-	    public IEnumerable<FileInfo> OrderFiles(BundleContext context, IEnumerable<FileInfo> files) {
+		public IEnumerable<FileInfo> OrderFiles(BundleContext context, IEnumerable<FileInfo> files) {
 			var workingItems = files.AsParallel().Select(i => new _WorkingItem {
 				Path = i.FullName,
 				FileInfo = i,
 				Dependencies = this._GetDependencies(i.FullName),
 			});
 
-            var fileDependencies = new Dictionary<string, _WorkingItem>(_DependencyNameComparer);
+			var fileDependencies = new Dictionary<string, _WorkingItem>(_DependencyNameComparer);
 			foreach (var item in workingItems) {
 				_WorkingItem duplicate;
 				if (fileDependencies.TryGetValue(item.Path, out duplicate))
