@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 	[TestFixture]

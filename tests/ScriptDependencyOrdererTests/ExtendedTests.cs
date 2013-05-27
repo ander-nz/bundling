@@ -77,6 +77,21 @@ alert('2');
 		}
 
 		[Test]
+		public void ADependencyReferenceShouldBeResolvedUsingTheSpecifiedNameComparer() {
+			var lib = this._WriteFile("lib.js", @"
+alert('1');
+");
+
+			var app = this._WriteFile("app.js", @"
+/// <reference path=""LIB.JS"" />
+alert('2');
+");
+
+			this._AssertOrderingFor(StringComparer.OrdinalIgnoreCase, lib, app).Expect(lib).Expect(app).Complete();
+			Assert.Throws<ArgumentException>(() => this._ExecuteOrderingFor(StringComparer.Ordinal, app));
+		}
+
+		[Test]
 		public void ADuplicateDependencyThatDiffersByRelativePathOrCaseOrSuffixShouldNotBeRepeated() {
 			var lib1 = this._WriteFile("libs/lib1-1.9.1.CUSTOM.PACK.JS", @"
 alert('1');

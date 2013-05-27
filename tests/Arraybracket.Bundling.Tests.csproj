@@ -48,7 +48,6 @@
     <Compile Include="ScriptDependencyOrdererTests\ComparerTests.cs" />
     <Compile Include="ScriptDependencyOrdererTests\SimpleTests.cs" />
     <Compile Include="ScriptDependencyOrdererTests\TestBase.cs" />
-    <Compile Include="ShouldExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">

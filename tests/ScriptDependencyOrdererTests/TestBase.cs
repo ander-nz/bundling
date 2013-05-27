@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 			return this._AssertOrderingFor(new ScriptDependencyOrderer(), inputFileNames);
 		}
 
+		/// <remarks>This method is marked as <see cref="PureAttribute">Pure</see> so that code analysis ensures that its return value is consumed.</remarks>
+		[Pure]
+		protected _AssertOrderingHelper _AssertOrderingFor(IEqualityComparer<string> dependencyNameComparer, params string[] inputFileNames) {
+			return this._AssertOrderingFor(new ScriptDependencyOrderer(dependencyNameComparer), inputFileNames);
+		}
+
 		protected sealed class _AssertOrderingHelper {
 			private string[] _OrderedFileNames;
 			private int _Index;
@@ -61,6 +68,12 @@ namespace Arraybracket.Bundling.Tests.ScriptDependencyOrdererTests {
 		protected void _ExecuteOrderingFor(params string[] inputFileNames) {
 			var inputFiles = inputFileNames.Select(i => new FileInfo(i)).ToArray();
 			var actualFiles = new ScriptDependencyOrderer().OrderFiles(null, inputFiles).ToArray();
+			TextWriter.Null.Write(actualFiles);
+		}
+
+		protected void _ExecuteOrderingFor(IEqualityComparer<string> dependencyNameComparer, params string[] inputFileNames) {
+			var inputFiles = inputFileNames.Select(i => new FileInfo(i)).ToArray();
+			var actualFiles = new ScriptDependencyOrderer(dependencyNameComparer).OrderFiles(null, inputFiles).ToArray();
 			TextWriter.Null.Write(actualFiles);
 		}
 
