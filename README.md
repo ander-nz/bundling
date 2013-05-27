@@ -64,3 +64,10 @@ scriptBundle.Orderer = orderer;
 ```
 
 Note that, by default, modernizr is already an excluded dependency.
+
+Contributors
+============
+
+Special thanks to the following contributors:
+
+* [Jean-Yves Boudreau](https://github.com/jyboudreau)
