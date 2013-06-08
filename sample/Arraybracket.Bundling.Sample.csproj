@@ -122,11 +122,13 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\libs\jquery-1.9.1.js" />
     <Content Include="Scripts\libs\jquery.d.ts" />
+    <Content Include="Styles\logo-alt.png" />
+    <Content Include="Styles\logo.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Styles\site.less" />
+    <None Include="Styles\site.less" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

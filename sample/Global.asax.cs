@@ -9,17 +9,17 @@ namespace Arraybracket.Bundling.Sample {
 			var scriptBundle = new ScriptBundle("~/Scripts/combined");
 			scriptBundle.Include("~/Scripts/libs/*.js");
 			scriptBundle.Include("~/Scripts/*.ts");
+			scriptBundle.Transforms.Clear();
 			scriptBundle.Transforms.Add(new JsTransformer());
 			scriptBundle.Orderer = new ScriptDependencyOrderer();
 			BundleTable.Bundles.Add(scriptBundle);
 
 			var styleBundle = new StyleBundle("~/Styles/combined");
 			styleBundle.Include("~/Styles/*.less");
+			styleBundle.Transforms.Clear();
 			styleBundle.Transforms.Add(new CssTransformer());
 			styleBundle.Transforms.Add(new CssUrlVersioner());
 			BundleTable.Bundles.Add(styleBundle);
-
-			BundleTable.EnableOptimizations = true;
 		}
 	}
 }

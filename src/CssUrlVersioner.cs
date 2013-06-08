@@ -9,38 +9,49 @@ namespace Arraybracket.Bundling {
 		private static readonly Regex _UrlRegex = new Regex(@"url\((?<url>[^\)]+)\)", RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 		public void Process(BundleContext context, BundleResponse response) {
-			var cssDir = Path.GetDirectoryName(context.HttpContext.Server.MapPath(context.BundleVirtualPath));
+			var httpServer = context.HttpContext.Server;
+			var httpResponse = context.HttpContext.Response;
+			var baseDir = Path.GetDirectoryName(httpServer.MapPath(context.BundleVirtualPath));
 
-			response.Content = _UrlRegex.Replace(response.Content, match => {
-				var url = match.Groups["url"].Value;
-				url = url.Trim('\'', '"');
+			using (var hashAlgorithm = this._CreateHashAlgorithm()) {
+				response.Content = _UrlRegex.Replace(response.Content, match => {
+					var url = match.Groups["url"].Value;
+					url = url.Trim('\'', '"');
 
-				if (url.Contains("//"))
-					return match.Value;
+					if (this._IsExternal(url))
+						return match.Value;
 
-				var path = url.StartsWith("/") ? context.HttpContext.Server.MapPath(url) : Path.GetFullPath(Path.Combine(cssDir, url.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar)));
-				if (!File.Exists(path))
-					return match.Value;
+					var path = this._MapPath(httpServer, baseDir, url);
+					if (!File.Exists(path))
+						return match.Value;
 
-				context.HttpContext.Response.AddFileDependency(path);
-				return "url(" + url + "?v=" + this.GetContentHashCode(File.ReadAllBytes(path)) + ")";
-			});
-		}
-
-		internal string GetContentHashCode(byte[] content) {
-			if (content.Length == 0) {
-				return "";
-			} else {
-				using (SHA256 hashAlgorithm = CreateHashAlgorithm())
-					return HttpServerUtility.UrlTokenEncode(hashAlgorithm.ComputeHash(content));
+					httpResponse.AddFileDependency(path);
+					var hashCode = this._GetHashCode(hashAlgorithm, path);
+					return string.Format("url({0}?v={1})", url, hashCode);
+				});
 			}
 		}
 
-		private static SHA256 CreateHashAlgorithm() {
+		private HashAlgorithm _CreateHashAlgorithm() {
 			if (CryptoConfig.AllowOnlyFipsAlgorithms)
-				return (SHA256)new SHA256CryptoServiceProvider();
+				return new SHA256CryptoServiceProvider();
 			else
-				return (SHA256)new SHA256Managed();
+				return new SHA256Managed();
+		}
+
+		private bool _IsExternal(string url) {
+			return url.Contains("//");
+		}
+
+		private string _MapPath(HttpServerUtilityBase httpServer, string baseDir, string url) {
+			if (url.StartsWith("/"))
+				return httpServer.MapPath(url);
+			else
+				return Path.GetFullPath(Path.Combine(baseDir, url.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar)));
+		}
+
+		private string _GetHashCode(HashAlgorithm hashAlgorithm, string filePath) {
+			return HttpServerUtility.UrlTokenEncode(hashAlgorithm.ComputeHash(File.ReadAllBytes(filePath)));
 		}
 	}
 }
