@@ -3,34 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Arraybracket.Bundling.Sample</title>
-		
-		<style>
-			html {
-				font-size: 0;
-				font-family: Calibri, Verdana, Tahoma, sans-serif;
-			}
-
-			body {
-				margin: 20px;
-				color: #333;
-			}
-
-			h1 {
-				margin: 0;
-				line-height: 1;
-			}
-
-			p {
-				margin-top: 20px;
-			}
-
-			i {
-				font-style: inherit;
-				font-family: Consolas, monospace;
-				font-size: 0.9em;
-				color: #a33;
-			}
-		</style>
+		@System.Web.Optimization.Styles.Render("~/Styles/combined")
 	</head>
 	<body>
 		<h1>Arraybracket.Bundling.Sample</h1>
@@ -39,5 +12,7 @@
 		<p>You can look at <i>Global.asax</i> to see how the script bundle was initialized, and look in the script files to see various dependency references. You'll notice that although <i>helpers.ts</i> has a reference to <i>jquery.d.ts</i>, the first script in the bundle is actually <i>jquery-1.9.1.js</i>, because of some name matching heuristics.</p>
 		<p><em>Note: this particular sample uses <a href="http://bundletransformer.codeplex.com/">Bundle Transformer</a> for TypeScript and minification (which is where the <i>JsTransformer</i> class comes from). Arraybracket.Bundling itself does not depend on this library.</em></p>
 		@System.Web.Optimization.Scripts.Render("~/Scripts/combined")
+		
+		<div class="asd"></div>
 	</body>
 </html>

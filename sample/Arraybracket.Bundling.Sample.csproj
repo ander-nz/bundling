@@ -43,10 +43,6 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\.packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Arraybracket.Bundling, Version=1.0.1.0, Culture=neutral, PublicKeyToken=71b4a5d2689c599e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\.packages\Arraybracket.Bundling.1.0.1\lib\net40\Arraybracket.Bundling.dll</HintPath>
-    </Reference>
     <Reference Include="BundleTransformer.Core">
       <HintPath>..\.packages\BundleTransformer.Core.1.6.21\lib\net40\BundleTransformer.Core.dll</HintPath>
     </Reference>
@@ -130,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="Styles\site.less" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -141,6 +138,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\Arraybracket.Bundling.csproj">
+      <Project>{7003f0b5-f7e3-4ec0-8655-5b605ad79d7b}</Project>
+      <Name>Arraybracket.Bundling</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

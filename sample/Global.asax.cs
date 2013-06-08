@@ -12,6 +12,14 @@ namespace Arraybracket.Bundling.Sample {
 			scriptBundle.Transforms.Add(new JsTransformer());
 			scriptBundle.Orderer = new ScriptDependencyOrderer();
 			BundleTable.Bundles.Add(scriptBundle);
+
+			var styleBundle = new StyleBundle("~/Styles/combined");
+			styleBundle.Include("~/Styles/*.less");
+			styleBundle.Transforms.Add(new CssTransformer());
+			styleBundle.Transforms.Add(new CssUrlVersioner());
+			BundleTable.Bundles.Add(styleBundle);
+
+			BundleTable.EnableOptimizations = true;
 		}
 	}
 }
