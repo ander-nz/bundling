@@ -6,13 +6,11 @@
 		<authors>Shane S. Anderson</authors>
 		
 		<summary>Contains CssUrlVersioner and ScriptDependencyOrderer, two useful improvements for ASP.NET Web Optimization Framework.</summary>
-		<description>
-			This package contains CssUrlVersioner and ScriptDependencyOrderer, two useful improvements for ASP.NET Web Optimization Framework.
+		<description>This package contains CssUrlVersioner and ScriptDependencyOrderer, two useful improvements for ASP.NET Web Optimization Framework.
 
-			CssUrlVersioner is a post-processor for StyleBundles that computes a hash for any url() values, causing the images to be reloaded if they're modified.
+CssUrlVersioner is a post-processor for StyleBundles that computes a hash for any url() values, causing the images to be reloaded if they're modified.
 
-			ScriptDependencyOrderer is a dependency-based IBundleOrderer for JavaScript and TypeScript bundles that looks at /// &lt;reference /> tags.
-		</description>
+ScriptDependencyOrderer is a dependency-based IBundleOrderer for JavaScript and TypeScript bundles that looks at /// &lt;reference /> tags.</description>
 		<tags>aspnet asp.net optimization minification dependencies css less</tags>
 
 		<licenseUrl>https://github.com/arraybracket/bundling/blob/css-url-versioner/LICENSE.md</licenseUrl>
