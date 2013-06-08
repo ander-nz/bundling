@@ -2,14 +2,20 @@
 <package>
 	<metadata>
 		<id>Arraybracket.Bundling</id>
-		<version>1.0.2</version>
+		<version>1.0.3-prerelease</version>
 		<authors>Shane S. Anderson</authors>
 		
-		<summary>A dependency-based IBundleOrderer for *.js and *.ts files that uses /// &lt;reference /> tags.</summary>
-		<description>ScriptDependencyOrderer is a dependency-based IBundleOrderer for JavaScript and TypeScript bundles that looks at /// &lt;reference /> tags.</description>
-		<tags>aspnet asp.net optimization minification dependencies</tags>
+		<summary>Contains CssUrlVersioner and ScriptDependencyOrderer, two useful improvements for ASP.NET Web Optimization Framework.</summary>
+		<description>
+			This package contains CssUrlVersioner and ScriptDependencyOrderer, two useful improvements for ASP.NET Web Optimization Framework.
 
-		<licenseUrl>https://github.com/arraybracket/bundling/blob/v1.0.2/LICENSE.md</licenseUrl>
+			CssUrlVersioner is a post-processor for StyleBundles that computes a hash for any url() values, causing the images to be reloaded if they're modified.
+
+			ScriptDependencyOrderer is a dependency-based IBundleOrderer for JavaScript and TypeScript bundles that looks at /// &lt;reference /> tags.
+		</description>
+		<tags>aspnet asp.net optimization minification dependencies css less</tags>
+
+		<licenseUrl>https://github.com/arraybracket/bundling/blob/css-url-versioner/LICENSE.md</licenseUrl>
 		<projectUrl>https://github.com/arraybracket/bundling</projectUrl>
 		<copyright>Copyright &#169;2013 Arraybracket Limited</copyright>
 		

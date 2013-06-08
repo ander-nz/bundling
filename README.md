@@ -1,14 +1,38 @@
 Arraybracket.Bundling
 =====================
 
+Arraybracket.Bundling contains two useful improvements for the ASP.NET Web Optimization Framework.
+
+<code>CssUrlVersioner</code> is a post-processor for <code>StyleBundle</code> instances that computes a hash for any <code>url()</code> values, causing the images to be reloaded if they're modified.
+
 <code>ScriptDependencyOrderer</code> is an implementation of <code>IBundleOrderer</code> for *.js and *.ts files that sorts any dependencies specified through <code>/// &lt; reference /></code> tags.
 
-Visual Studio's JavaScript editor uses <code>/// &lt; reference /> tags</code> to assist intellisense. Similarly, TypeScript uses the same tags to specify dependencies (for both intellisense and code verification). <code>ScriptDependencyOrderer</code> will scan all the included files in a <code>ScriptBundle</code> and ensure that the specified dependencies are sorted appropriately.
+Using CssUrlVersioner
+=====================
 
-Some JavaScript libraries have separate *.intellisense.js or *.d.ts files, and <code>ScriptDependencyOrderer</code> will resolve those by ensuring that the similarly-named *.js file is sorted first.
+**Warning: CssUrlVersioner is currently available in pre-release form only.**
 
-Usage
-=====
+From your web project, add a NuGet package reference by running:
+
+```
+Install-Package Arraybracket.Bundling -Pre
+```
+
+Then, when constructing a <code>StyleBundle</code>, add an instance of <code>CssUrlVersioner</code> to the <code>Transforms</code> property. The below example specified the required change:
+
+```csharp
+var styleBundle = new StyleBundle("~/styled/combined");
+styleBundle.Include("~/styles/libs/*.css");
+styleBundle.Include("~/styles/*.less");
+styleBundle.Transforms.Add(new CssTransformer());
+styleBundle.Transforms.Add(new CssUrlVersioner()); // add this line
+BundleTable.Bundles.Add(styleBundle);
+```
+
+Note: if you have multiple <code>Transforms</code> values specified, as in the example above, <code>CssUrlVersioner</code> should be the last one.
+
+Using ScriptDependencyOrderer
+=============================
 
 From your web project, add a NuGet package reference by running:
 
@@ -27,43 +51,10 @@ scriptBundle.Orderer = new ScriptDependencyOrderer(); // add this line
 BundleTable.Bundles.Add(scriptBundle);
 ```
 
-Relative Paths
-==============
+More information
+================
 
-A <code>/// &lt; reference /></code> tag, in both *.js and *.ts files, specifies a path relative to the file containing the reference. In the scenario where:
-
-* <code>~/app.js</code> references <code>helpers/jquery.fancybox.js</code>
-* <code>~/helpers/jquery.fancybox.js</code> references <code>core/jquery.js</code>
-
-then the sorted order will be:
-
-* <code>~/helpers/core/jquery.js</code>
-* <code>~/helpers/jquery.fancybox.js</code>
-* <code>~/app.js</code>
-
-Name Matching
-=============
-
-To support Visual Studio's JavaScript intellisense and TypeScript correctly, certain names are treated as the same for the purposes of detecting dependencies. Different extensions, different suffixes, or optional version numbers are excluded in the comparison. For example:
-
-* <code>jquery-1.9.0.js</code> matches <code>jquery-vsdoc.js</code>
-* <code>jquery-1.9.0.js</code> matches <code>jquery-1.9.0-vsdoc.js</code>
-* <code>jquery-1.9.0.js</code> matches <code>jquery.intellisense.js</code>
-* <code>jquery.min.js</code> matches <code>jquery-1.9.d.ts</code>
-* <code>jquery-ui-1.10.custom.js</code> matches <code>jquery-ui.d.ts</code>
-
-Excluded Dependencies
-=====================
-
-To ensure that name matching doesn't miss any references, <code>ScriptDependencyOrderer</code> will throw an exception if a dependency is referenced but cannot be found in the bundle. Since certain libraries have to be included separately from the bundle (such as Modernizr), but may still be referenced as a dependency (i.e. modernizr.d.ts), you can specify an excluded dependency by setting <code>ExcludedDependencies</code> on the orderer.
-
-```csharp
-var orderer = new ScriptDependencyOrderer();
-orderer.ExcludedDependencies.Add("modernizr"); // excludes any files whose file name starts with "modernizr"
-scriptBundle.Orderer = orderer;
-```
-
-Note that, by default, modernizr is already an excluded dependency.
+Please see the [wiki](https://github.com/arraybracket/bundling/wiki) for more information.
 
 Contributors
 ============
