@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>CssUrlVersioner sample</title>
+		@System.Web.Optimization.Styles.Render("~/Styles/combined")
+	</head>
+	<body>
+		<h1>CssUrlVersioner sample</h1>
+		<p>In this sample, the element below has a <i>background-image</i> set within the stylesheet. If you've set <i>debug=false</i> in <i>web.config</i>, you'll notice that the <i>url()</i> value has a hash appended to the end of it. This hash (and thus the hash of the stylesheet) will change if the image is modified.</p>
+		<p>If you go into the project folder and swap the filenames of <i>logo.png</i> and <i>logo-alt.png</i>, the server will clear its cache of the bundled CSS response, and the browser will reload both the CSS file and the image next time it requests this page. By contrast, if you only modify the contents of <i>site.less</i>, the browser will only reload the CSS file, since the generated image hash remains the same.</p>
+		<div class="logo"></div>
+	</body>
+</html>

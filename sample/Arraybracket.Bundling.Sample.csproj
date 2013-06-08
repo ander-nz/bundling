@@ -118,7 +118,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\helpers.ts" />
     <TypeScriptCompile Include="Scripts\app.ts" />
-    <None Include="index.cshtml" />
+    <Content Include="CssUrlVersioner.cshtml" />
+    <Content Include="index.cshtml" />
+    <None Include="ScriptDependencyOrderer.cshtml" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\libs\jquery-1.9.1.js" />
     <Content Include="Scripts\libs\jquery.d.ts" />

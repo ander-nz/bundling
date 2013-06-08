@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ScriptDependencyOrderer sample</title>
+		@System.Web.Optimization.Styles.Render("~/Styles/combined")
+		<style type="text/css">
+			html {
+				font-size: 0; /* as we'll be setting the font-size in JavaScript on page load */
+			}
+		</style>
+	</head>
+	<body>
+		<h1>ScriptDependencyOrderer sample</h1>
+		<p>In this simple sample, the scripts page will change its font-size based on the width of the page (both on document ready and window resize). The logic for that behavior is in <i>app.ts</i>, which depends on <i>helpers.ts</i>, which subsequently depends on jQuery. Since the code in <i>app.ts</i> calls code in <i>helpers.ts</i> <b>before</b> the whole page is loaded, it's important that <i>helpers.ts</i> (and jQuery) are included before <i>app.ts</i> is parsed and executed.</p>
+		<p>When <i>web.config</i> has <i>debug=true</i>, you can see that <i>ScriptDependencyOrderer</i> includes the scripts in the required order (jQuery, <i>helpers.ts</i>, <i>app.ts</i>). When <i>debug=false</i> and the scripts are combined, that same order is maintained.</p>
+		<p>You can look at <i>Global.asax</i> to see how the script bundle was initialized, and look in the script files to see various dependency references. You'll notice that although <i>helpers.ts</i> has a reference to <i>jquery.d.ts</i>, the first script in the bundle is actually <i>jquery-1.9.1.js</i>, because of some name matching heuristics.</p>
+		<p><em>Note: this particular sample uses <a href="http://bundletransformer.codeplex.com/">Bundle Transformer</a> for TypeScript and minification (which is where the <i>JsTransformer</i> class comes from). Arraybracket.Bundling itself does not depend on this library.</em></p>
+		@System.Web.Optimization.Scripts.Render("~/Scripts/combined")
+	</body>
+</html>
