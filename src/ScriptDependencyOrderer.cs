@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Hosting;
 using System.Web.Optimization;
 
 namespace Arraybracket.Bundling {
 	public sealed class ScriptDependencyOrderer : IBundleOrderer {
-
-		private readonly IEqualityComparer<string> _DependencyNameComparer;
-
 		private static readonly Regex _ReferenceRegex = new Regex(@"///\s*<reference\s+path=""(?<path>[^""]*)""\s*/>");
+		private readonly IEqualityComparer<string> _DependencyNameComparer;
 
 		public List<string> ExcludedDependencies = new List<string> {
 			"modernizr",
 		};
 		
-		public ScriptDependencyOrderer() : this(new DependencyNameComparer()) {
+		public ScriptDependencyOrderer() {
+			this._DependencyNameComparer = new DependencyNameComparer();
 		}
 		
 		public ScriptDependencyOrderer(IEqualityComparer<string> dependencyNameComparer) {
 			_DependencyNameComparer = dependencyNameComparer;
 		}
 
-		public IEnumerable<FileInfo> OrderFiles(BundleContext context, IEnumerable<FileInfo> files) {
+		public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files) {
 			var workingItems = files.AsParallel().Select(i => new _WorkingItem {
-				Path = i.FullName,
-				FileInfo = i,
-				Dependencies = this._GetDependencies(i.FullName),
+				Path = i.VirtualFile.VirtualPath,
+				BundleFile = i,
+				Dependencies = this._GetDependencies(i.VirtualFile),
 			});
 
 			var fileDependencies = new Dictionary<string, _WorkingItem>(_DependencyNameComparer);
@@ -50,23 +51,28 @@ namespace Arraybracket.Bundling {
 				var result = fileDependencies.Values.FirstOrDefault(f => f.Dependencies.All(d => !fileDependencies.ContainsKey(d)));
 				if (result == null)
 					throw new ArgumentException(string.Format("During dependency resolution, a cyclic dependency was detected among the remaining dependencies {0}.", string.Join(", ", fileDependencies.Select(d => "'" + Path.GetFileName(d.Value.Path) + "'"))));
-				yield return result.FileInfo;
+				yield return result.BundleFile;
 				fileDependencies.Remove(result.Path);
 			}
 		}
 		
-		private string[] _GetDependencies(string path) {
-			var dir = Path.GetDirectoryName(path);
+		private string[] _GetDependencies(VirtualFile virtualFile) {
+			var dir = VirtualPathUtility.GetDirectory(virtualFile.VirtualPath);
 
-			return _ReferenceRegex.Matches(File.ReadAllText(path)).Cast<Match>().Select(m => {
+			string content;
+			using (var stream = virtualFile.Open())
+			using (var reader = new StreamReader(stream))
+				content = reader.ReadToEnd();
+
+			return _ReferenceRegex.Matches(content).Cast<Match>().Select(m => {
 				var relativePath = m.Groups["path"].Value;
-				return Path.GetFullPath(Path.Combine(dir, relativePath));
-			}).Where(m => this.ExcludedDependencies.All(e => !m.Contains(@"\" + e))).ToArray();
+				return VirtualPathUtility.Combine(dir, relativePath);
+			}).Where(m => this.ExcludedDependencies.All(e => !m.Contains(@"/" + e))).ToArray();
 		}
 
 		private sealed class _WorkingItem {
 			public string Path;
-			public FileInfo FileInfo;
+			public BundleFile BundleFile;
 			public string[] Dependencies;
 		}
 	}
