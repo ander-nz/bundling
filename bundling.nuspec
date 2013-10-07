@@ -2,19 +2,19 @@
 <package>
 	<metadata>
 		<id>Arraybracket.Bundling</id>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 		<authors>Shane S. Anderson</authors>
 		
 		<summary>A dependency-based IBundleOrderer for *.js and *.ts files that uses /// &lt;reference /> tags.</summary>
 		<description>ScriptDependencyOrderer is a dependency-based IBundleOrderer for JavaScript and TypeScript bundles that looks at /// &lt;reference /> tags.</description>
 		<tags>aspnet asp.net optimization minification dependencies</tags>
 
-		<licenseUrl>https://github.com/arraybracket/bundling/blob/v1.0.2/LICENSE.md</licenseUrl>
+		<licenseUrl>https://github.com/arraybracket/bundling/blob/v1.0.3/LICENSE.md</licenseUrl>
 		<projectUrl>https://github.com/arraybracket/bundling</projectUrl>
 		<copyright>Copyright &#169;2013 Arraybracket Limited</copyright>
 		
 		<dependencies>
-			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.0.0" />
+			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.0" />
 		</dependencies>
 	</metadata>
 
